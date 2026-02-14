@@ -1,11 +1,11 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport;
+namespace Yxx\WeeklyReport;
 
-use Youyingxiang\WeeklyReport\Commands\WeeklyReportCommand;
-use Youyingxiang\WeeklyReport\Services\GitHubClient;
-use Youyingxiang\WeeklyReport\Services\GitLogParser;
-use Youyingxiang\WeeklyReport\Services\ReportGenerator;
+use Yxx\WeeklyReport\Commands\WeeklyReportCommand;
+use Yxx\WeeklyReport\Services\GitHubClient;
+use Yxx\WeeklyReport\Services\GitLogParser;
+use Yxx\WeeklyReport\Services\ReportGenerator;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 

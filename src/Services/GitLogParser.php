@@ -1,6 +1,6 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Services;
+namespace Yxx\WeeklyReport\Services;
 
 use Carbon\Carbon;
 use Illuminate\Support\Collection;

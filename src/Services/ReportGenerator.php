@@ -1,10 +1,10 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Services;
+namespace Yxx\WeeklyReport\Services;
 
 use Carbon\Carbon;
-use Youyingxiang\WeeklyReport\Mail\PreviewReportMail;
-use Youyingxiang\WeeklyReport\Mail\FinalReportMail;
+use Yxx\WeeklyReport\Mail\PreviewReportMail;
+use Yxx\WeeklyReport\Mail\FinalReportMail;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\URL;

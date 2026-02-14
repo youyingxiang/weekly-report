@@ -1,4 +1,4 @@
-# youyingxiang/weekly-report
+# yxx/weekly-report
 
 [English](README.md)
 
@@ -26,7 +26,7 @@ php artisan report:weekly
 ## 安装
 
 ```bash
-composer require youyingxiang/weekly-report
+composer require yxx/weekly-report
 ```
 
 ## 配置

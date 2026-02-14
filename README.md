@@ -1,4 +1,4 @@
-# youyingxiang/weekly-report
+# yxx/weekly-report
 
 [中文文档](README-ZH.md)
 
@@ -7,7 +7,7 @@ A Laravel package that generates weekly reports from git commits and GitHub issu
 ## Installation
 
 ```bash
-composer require youyingxiang/weekly-report
+composer require yxx/weekly-report
 ```
 
 ## Setup

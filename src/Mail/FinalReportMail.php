@@ -1,6 +1,6 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Mail;
+namespace Yxx\WeeklyReport\Mail;
 
 use Carbon\Carbon;
 use Illuminate\Bus\Queueable;

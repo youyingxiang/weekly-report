@@ -1,8 +1,8 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Http\Controllers;
+namespace Yxx\WeeklyReport\Http\Controllers;
 
-use Youyingxiang\WeeklyReport\Services\ReportGenerator;
+use Yxx\WeeklyReport\Services\ReportGenerator;
 use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 use Illuminate\Support\Facades\Cache;

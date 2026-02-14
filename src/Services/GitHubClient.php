@@ -1,6 +1,6 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Services;
+namespace Yxx\WeeklyReport\Services;
 
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Http;
@@ -75,7 +75,7 @@ class GitHubClient
     {
         $headers = [
             'Accept'     => 'application/vnd.github.v3+json',
-            'User-Agent' => 'youyingxiang-weekly-report',
+            'User-Agent' => 'yxx-weekly-report',
         ];
 
         if ($this->token) {

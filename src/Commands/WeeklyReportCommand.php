@@ -1,8 +1,8 @@
 <?php
 
-namespace Youyingxiang\WeeklyReport\Commands;
+namespace Yxx\WeeklyReport\Commands;
 
-use Youyingxiang\WeeklyReport\Services\ReportGenerator;
+use Yxx\WeeklyReport\Services\ReportGenerator;
 use Illuminate\Console\Command;
 
 class WeeklyReportCommand extends Command

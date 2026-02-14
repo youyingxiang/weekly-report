@@ -1,11 +1,11 @@
 {
-    "name": "youyingxiang/weekly-report",
+    "name": "yxx/weekly-report",
     "description": "Generate weekly reports from git commits and GitHub issues, with email preview and confirmation workflow.",
     "type": "library",
     "license": "MIT",
     "authors": [
         {
-            "name": "youyingxiang",
+            "name": "yxx",
             "email": "youyingxiang@gmail.com"
         }
     ],
@@ -18,13 +18,13 @@
     },
     "autoload": {
         "psr-4": {
-            "Youyingxiang\\WeeklyReport\\": "src/"
+            "Yxx\\WeeklyReport\\": "src/"
         }
     },
     "extra": {
         "laravel": {
             "providers": [
-                "Youyingxiang\\WeeklyReport\\WeeklyReportServiceProvider"
+                "Yxx\\WeeklyReport\\WeeklyReportServiceProvider"
             ]
         }
     },
