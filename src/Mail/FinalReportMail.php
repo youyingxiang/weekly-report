@@ -27,10 +27,6 @@ class FinalReportMail extends Mailable
         );
 
         return $this
-            ->from(
-                config('weekly-report.mail.from.address'),
-                config('weekly-report.mail.from.name')
-            )
             ->subject($subject)
             ->view('weekly-report::emails.final')
             ->with([

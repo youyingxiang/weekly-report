@@ -27,13 +27,11 @@ class ReportGenerator
         $untilDate = $weekEnd->copy()->addDay();
 
         $repositories = config('weekly-report.repositories', []);
-        $authorEmail = config('weekly-report.git_author_email');
 
         $result = $this->gitLogParser->scanRepositories(
             $repositories,
             $weekStart,
             $untilDate,
-            $authorEmail
         );
 
         $issues = collect();
@@ -62,7 +60,7 @@ class ReportGenerator
         $key = 'weekly-report:' . Str::random(32);
         $previewTo = config('weekly-report.mail.preview_to');
         $recipients = config('weekly-report.mail.recipients', []);
-        $ttl = (int) config('weekly-report.signed_url_expiration', 1440);
+        $ttl = 1440;
 
         $report = [
             'week_start'   => $reportData['week_start']->format('Y-m-d'),
@@ -104,7 +102,7 @@ class ReportGenerator
      */
     public function sendFinal(array $report): void
     {
-        $recipients = $report['recipients'] ?? config('weekly-report.mail.recipients', []);
+        $recipients = $report['recipients'] ?? [];
 
         if (empty($recipients)) {
             return;

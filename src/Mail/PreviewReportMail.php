@@ -29,10 +29,6 @@ class PreviewReportMail extends Mailable
         );
 
         return $this
-            ->from(
-                config('weekly-report.mail.from.address'),
-                config('weekly-report.mail.from.name')
-            )
             ->subject("[Preview] {$subject}")
             ->view('weekly-report::emails.preview')
             ->with([

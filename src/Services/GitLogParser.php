@@ -72,11 +72,20 @@ class GitLogParser
         foreach ($repositories as $repoConfig) {
             $path = $repoConfig['path'];
             $branch = $repoConfig['branch'] ?? null;
-            $repoName = ($repoConfig['owner'] ?? '') . '/' . ($repoConfig['repo'] ?? basename($path));
 
             if (! is_dir($path . '/.git')) {
                 continue;
             }
+
+            // Auto-detect owner/repo from git remote if not configured
+            $owner = $repoConfig['owner'] ?? null;
+            $repo = $repoConfig['repo'] ?? null;
+
+            if (! $owner || ! $repo) {
+                [$owner, $repo] = $this->resolveOwnerRepoFromRemote($path, $owner, $repo);
+            }
+
+            $repoName = ($owner ?? '') . '/' . ($repo ?? basename($path));
 
             $result = $this->parse($path, $since, $until, $authorEmail, $branch);
 
@@ -87,11 +96,11 @@ class GitLogParser
             });
 
             // Tag issues with repo config for GitHub API lookup
-            $taggedIssues = $result['issues']->map(function ($number) use ($repoConfig) {
+            $taggedIssues = $result['issues']->map(function ($number) use ($owner, $repo) {
                 return [
                     'number' => $number,
-                    'owner'  => $repoConfig['owner'] ?? null,
-                    'repo'   => $repoConfig['repo'] ?? null,
+                    'owner'  => $owner,
+                    'repo'   => $repo,
                 ];
             });
 
@@ -108,6 +117,33 @@ class GitLogParser
             'commits' => $allCommits,
             'issues'  => $uniqueIssues,
         ];
+    }
+
+    /**
+     * Parse owner/repo from `git remote get-url origin`.
+     *
+     * Supports:
+     *   git@github.com:owner/repo.git
+     *   https://github.com/owner/repo.git
+     *
+     * @return array{0: ?string, 1: ?string} [owner, repo]
+     */
+    protected function resolveOwnerRepoFromRemote(string $path, ?string $owner, ?string $repo): array
+    {
+        $output = [];
+        @exec('git -C ' . escapeshellarg($path) . ' remote get-url origin 2>/dev/null', $output);
+
+        $url = trim($output[0] ?? '');
+        if (! $url) {
+            return [$owner, $repo];
+        }
+
+        // git@github.com:owner/repo.git
+        if (preg_match('#[:/]([^/]+)/([^/]+?)(?:\.git)?$#', $url, $m)) {
+            return [$owner ?? $m[1], $repo ?? $m[2]];
+        }
+
+        return [$owner, $repo];
     }
 
     protected function buildCommand(string $repoPath, Carbon $since, Carbon $until, ?string $authorEmail, ?string $branch): string

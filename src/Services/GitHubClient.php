@@ -13,13 +13,31 @@ class GitHubClient
 
     public function __construct(?string $token = null)
     {
-        $this->token = $token ?? config('weekly-report.github.token', '');
+        $this->token = $token
+            ?? static::resolveTokenFromGhCli()
+            ?? '';
+    }
+
+    /**
+     * Try to get token from `gh auth token` (GitHub CLI).
+     */
+    protected static function resolveTokenFromGhCli(): ?string
+    {
+        $output = [];
+        $code = 0;
+        @exec('gh auth token 2>/dev/null', $output, $code);
+
+        if ($code === 0 && ! empty($output[0])) {
+            return trim($output[0]);
+        }
+
+        return null;
     }
 
     /**
      * Fetch a single issue's details.
      */
-    public function getIssue(string $owner, string $repo, int $number): ?array
+    public function getIssue(?string $owner, ?string $repo, int $number): ?array
     {
         if (! $owner || ! $repo) {
             return null;

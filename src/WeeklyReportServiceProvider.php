@@ -20,11 +20,7 @@ class WeeklyReportServiceProvider extends ServiceProvider
 
         $this->app->singleton(GitLogParser::class);
 
-        $this->app->singleton(GitHubClient::class, function ($app) {
-            return new GitHubClient(
-                config('weekly-report.github.token')
-            );
-        });
+        $this->app->singleton(GitHubClient::class);
 
         $this->app->singleton(ReportGenerator::class, function ($app) {
             return new ReportGenerator(
@@ -57,7 +53,7 @@ class WeeklyReportServiceProvider extends ServiceProvider
 
     protected function registerRoutes(): void
     {
-        $prefix = config('weekly-report.route_prefix', 'weekly-report');
+        $prefix = 'weekly-report';
 
         Route::prefix($prefix)
             ->middleware('web')

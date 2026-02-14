@@ -12,73 +12,39 @@ composer require yxx/weekly-report
 
 ## Setup
 
-### 1. Publish config
-
-```bash
-php artisan vendor:publish --tag=weekly-report-config
-```
-
-### 2. Environment variables
-
 Add to your `.env`:
 
 ```env
-# GitHub token (needs `repo` scope for private repos)
-WEEKLY_REPORT_GITHUB_TOKEN=ghp_xxxxxxxxxxxx
-
-# Repository config
-WEEKLY_REPORT_REPO_PATH=/path/to/your/repo
-WEEKLY_REPORT_REPO_OWNER=your-org
-WEEKLY_REPORT_REPO_NAME=your-repo
-WEEKLY_REPORT_REPO_BRANCH=main
-
-# Filter commits by author (optional)
-WEEKLY_REPORT_GIT_AUTHOR=you@example.com
-
-# Mail config
 WEEKLY_REPORT_PREVIEW_TO=you@example.com
 WEEKLY_REPORT_RECIPIENTS=boss@example.com,team@example.com
-WEEKLY_REPORT_SUBJECT="Weekly Report ({week_start} - {week_end})"
 ```
 
-### 3. Multi-repo setup
+That's it. Everything else is auto-detected:
 
-Edit `config/weekly-report.php` to add multiple repositories:
+| Item | Auto-detection |
+|---|---|
+| GitHub token | `gh auth token` (GitHub CLI) |
+| Repo owner/name | `git remote get-url origin` |
+| Repo path | Defaults to current project |
+| Mail from | Laravel's `MAIL_FROM_*` config |
+
+### Multi-repo setup (optional)
+
+Edit `config/weekly-report.php`:
 
 ```php
 'repositories' => [
-    [
-        'path'   => '/path/to/repo-a',
-        'owner'  => 'your-org',
-        'repo'   => 'repo-a',
-        'branch' => 'main',
-    ],
-    [
-        'path'   => '/path/to/repo-b',
-        'owner'  => 'your-org',
-        'repo'   => 'repo-b',
-    ],
+    ['path' => '/path/to/repo-a'],
+    ['path' => '/path/to/repo-b'],
 ],
 ```
 
 ## Usage
 
-### Generate and preview
-
 ```bash
+# Generate and send preview email
 php artisan report:weekly
-```
 
-This will:
-1. Scan git log for the current week's commits
-2. Extract `#issue` references from commit messages
-3. Fetch issue titles from GitHub API
-4. Send a **preview email** to yourself (with Confirm / Cancel buttons)
-5. Click **Confirm** to send the final report to all recipients
-
-### Options
-
-```bash
 # Dry run - show data without sending emails
 php artisan report:weekly --dry-run
 
@@ -86,21 +52,21 @@ php artisan report:weekly --dry-run
 php artisan report:weekly --weeks-ago=1
 ```
 
-### Confirmation flow
+### How it works
 
-- Click **Confirm** in the preview email to send the final report to all recipients
-- Click **Cancel** to discard the report
-- Links expire after 24 hours (configurable via `WEEKLY_REPORT_URL_EXPIRATION`)
+1. Scans `git log` for the current week's commits
+2. Extracts `#issue` references from commit messages
+3. Fetches issue titles via GitHub API
+4. Sends a **preview email** to you (with Confirm / Cancel signed URL buttons)
+5. Click **Confirm** → final report sent to all recipients
+6. Click **Cancel** → report discarded
+7. Links expire after 24 hours
 
 ## Customization
-
-Publish and customize the email/page templates:
 
 ```bash
 php artisan vendor:publish --tag=weekly-report-views
 ```
-
-Templates will be copied to `resources/views/vendor/weekly-report/`.
 
 ## Architecture
 
@@ -111,7 +77,7 @@ src/
 ├── Mail/                               # Preview and final mailables
 ├── Services/
 │   ├── GitLogParser.php                # Git log parsing + issue extraction
-│   ├── GitHubClient.php                # GitHub API client
+│   ├── GitHubClient.php                # GitHub API client (auto token via gh CLI)
 │   └── ReportGenerator.php             # Orchestrator
 └── WeeklyReportServiceProvider.php     # Auto-registered provider
 ```
